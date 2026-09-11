@@ -219,6 +219,17 @@ function uploadPrimitive(
         );
     }
 
+    const jointsLocation = GLTF_ATTRIBUTE_LOCATIONS.JOINTS_0 ?? 4;
+    const weightsLocation = GLTF_ATTRIBUTE_LOCATIONS.WEIGHTS_0 ?? 5;
+    if (!primitive.attributes.has("JOINTS_0")) {
+      gl.disableVertexAttribArray(jointsLocation);
+      gl.vertexAttribI4ui(jointsLocation, 0, 0, 0, 0);
+    }
+    if (!primitive.attributes.has("WEIGHTS_0")) {
+      gl.disableVertexAttribArray(weightsLocation);
+      gl.vertexAttrib4f(weightsLocation, 1, 0, 0, 0);
+    }
+
     let indexType: number | undefined;
     if (primitive.indices !== undefined) {
       if (

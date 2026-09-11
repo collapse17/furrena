@@ -14,5 +14,10 @@ export const appConfig = {
     maxCatchUpSteps: 4,
     maxDeltaSeconds: 0.25,
   },
-  audio: { masterVolume: 0.8, sfxVolume: 0.9, musicVolume: 0.65 },
+  audio: {
+    masterVolume: 0.8,
+    sfxVolume: 0.9,
+    musicVolume: 0.65,
+    maxSources: 18,
+  },
 } as const;

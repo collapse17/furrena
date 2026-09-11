@@ -6,55 +6,28 @@
       "purpose": "Verified arena, skinned idle/run/fire character, standard meshes, a teapot, and material-lighting showcase for engine stage 5"
     }
   },
-  "extensionsUsed": [
-    "KHR_materials_unlit"
-  ],
+  "extensionsUsed": ["KHR_materials_unlit"],
   "scene": 0,
   "scenes": [
     {
       "name": "Engine stage 3",
-      "nodes": [
-        0
-      ]
+      "nodes": [0]
     }
   ],
   "nodes": [
     {
       "name": "SceneRoot",
-      "children": [
-        1,
-        2,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14
-      ]
+      "children": [1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14]
     },
     {
       "name": "ArenaBlock",
       "mesh": 0,
-      "translation": [
-        0,
-        -0.2,
-        0
-      ]
+      "translation": [0, -0.2, 0]
     },
     {
       "name": "CharacterRoot",
-      "children": [
-        3,
-        4
-      ],
-      "translation": [
-        0,
-        0.01,
-        0
-      ]
+      "children": [3, 4],
+      "translation": [0, 0.01, 0]
     },
     {
       "name": "CharacterMesh",
@@ -63,186 +36,88 @@
     },
     {
       "name": "Hips",
-      "children": [
-        5
-      ]
+      "children": [5]
     },
     {
       "name": "HeadJoint",
-      "translation": [
-        0,
-        1,
-        0
-      ]
+      "translation": [0, 1, 0]
     },
     {
       "name": "Metallic panel",
       "mesh": 2,
-      "translation": [
-        -1.9,
-        1.55,
-        -3.45
-      ]
+      "translation": [-1.9, 1.55, -3.45]
     },
     {
       "name": "Emissive panel",
       "mesh": 3,
-      "translation": [
-        -0.63,
-        1.55,
-        -3.45
-      ]
+      "translation": [-0.63, 1.55, -3.45]
     },
     {
       "name": "Glass panel",
       "mesh": 4,
-      "translation": [
-        0.63,
-        1.55,
-        -3.45
-      ]
+      "translation": [0.63, 1.55, -3.45]
     },
     {
       "name": "Unlit panel",
       "mesh": 5,
-      "translation": [
-        1.9,
-        1.55,
-        -3.45
-      ]
+      "translation": [1.9, 1.55, -3.45]
     },
     {
       "name": "Standard cube",
       "mesh": 6,
-      "translation": [
-        -3,
-        0.55,
-        1.7
-      ]
+      "translation": [-3, 0.55, 1.7]
     },
     {
       "name": "Standard sphere",
       "mesh": 7,
-      "translation": [
-        -1.65,
-        0.62,
-        1.7
-      ],
-      "scale": [
-        0.62,
-        0.62,
-        0.62
-      ]
+      "translation": [-1.65, 0.62, 1.7],
+      "scale": [0.62, 0.62, 0.62]
     },
     {
       "name": "Standard cylinder",
       "mesh": 8,
-      "translation": [
-        -0.25,
-        0.55,
-        1.7
-      ]
+      "translation": [-0.25, 0.55, 1.7]
     },
     {
       "name": "Standard torus",
       "mesh": 9,
-      "translation": [
-        1.25,
-        0.68,
-        1.7
-      ],
-      "scale": [
-        0.7,
-        0.7,
-        0.7
-      ]
+      "translation": [1.25, 0.68, 1.7],
+      "scale": [0.7, 0.7, 0.7]
     },
     {
       "name": "Low-poly teapot",
-      "children": [
-        15,
-        16,
-        17,
-        18,
-        19
-      ],
-      "translation": [
-        2.35,
-        0.78,
-        0.1
-      ]
+      "children": [15, 16, 17, 18, 19],
+      "translation": [2.35, 0.78, 0.1]
     },
     {
       "name": "Teapot body",
       "mesh": 7,
-      "scale": [
-        0.76,
-        0.56,
-        0.76
-      ]
+      "scale": [0.76, 0.56, 0.76]
     },
     {
       "name": "Teapot lid",
       "mesh": 8,
-      "translation": [
-        0,
-        0.56,
-        0
-      ],
-      "scale": [
-        0.44,
-        0.1,
-        0.44
-      ]
+      "translation": [0, 0.56, 0],
+      "scale": [0.44, 0.1, 0.44]
     },
     {
       "name": "Teapot spout",
       "mesh": 10,
-      "translation": [
-        -0.72,
-        0.1,
-        0
-      ],
-      "rotation": [
-        0,
-        0,
-        0.5,
-        0.866
-      ]
+      "translation": [-0.72, 0.1, 0],
+      "rotation": [0, 0, 0.5, 0.866]
     },
     {
       "name": "Teapot handle",
       "mesh": 9,
-      "translation": [
-        0.78,
-        0.08,
-        0
-      ],
-      "rotation": [
-        0,
-        0,
-        0.707,
-        0.707
-      ],
-      "scale": [
-        0.58,
-        0.78,
-        0.58
-      ]
+      "translation": [0.78, 0.08, 0],
+      "rotation": [0, 0, 0.707, 0.707],
+      "scale": [0.58, 0.78, 0.58]
     },
     {
       "name": "Teapot lid knob",
       "mesh": 7,
-      "translation": [
-        0,
-        0.73,
-        0
-      ],
-      "scale": [
-        0.12,
-        0.12,
-        0.12
-      ]
+      "translation": [0, 0.73, 0],
+      "scale": [0.12, 0.12, 0.12]
     }
   ],
   "buffers": [
@@ -498,16 +373,8 @@
       "componentType": 5126,
       "count": 24,
       "type": "VEC3",
-      "min": [
-        -4,
-        -0.2,
-        -4
-      ],
-      "max": [
-        4,
-        0.2,
-        4
-      ]
+      "min": [-4, -0.2, -4],
+      "max": [4, 0.2, 4]
     },
     {
       "bufferView": 1,
@@ -532,16 +399,8 @@
       "componentType": 5126,
       "count": 4,
       "type": "VEC3",
-      "min": [
-        -0.35,
-        0,
-        0
-      ],
-      "max": [
-        0.35,
-        1.5,
-        0
-      ]
+      "min": [-0.35, 0, 0],
+      "max": [0.35, 1.5, 0]
     },
     {
       "bufferView": 5,
@@ -578,16 +437,8 @@
       "componentType": 5126,
       "count": 4,
       "type": "VEC3",
-      "min": [
-        -0.55,
-        -0.55,
-        0
-      ],
-      "max": [
-        0.55,
-        0.55,
-        0
-      ]
+      "min": [-0.55, -0.55, 0],
+      "max": [0.55, 0.55, 0]
     },
     {
       "bufferView": 11,
@@ -612,16 +463,8 @@
       "componentType": 5126,
       "count": 24,
       "type": "VEC3",
-      "min": [
-        -0.5,
-        -0.5,
-        -0.5
-      ],
-      "max": [
-        0.5,
-        0.5,
-        0.5
-      ]
+      "min": [-0.5, -0.5, -0.5],
+      "max": [0.5, 0.5, 0.5]
     },
     {
       "bufferView": 15,
@@ -646,16 +489,8 @@
       "componentType": 5126,
       "count": 187,
       "type": "VEC3",
-      "min": [
-        -1,
-        -1,
-        -1
-      ],
-      "max": [
-        1,
-        1,
-        1
-      ]
+      "min": [-1, -1, -1],
+      "max": [1, 1, 1]
     },
     {
       "bufferView": 19,
@@ -680,16 +515,8 @@
       "componentType": 5126,
       "count": 70,
       "type": "VEC3",
-      "min": [
-        -0.5,
-        -0.5,
-        -0.5
-      ],
-      "max": [
-        0.5,
-        0.5,
-        0.5
-      ]
+      "min": [-0.5, -0.5, -0.5],
+      "max": [0.5, 0.5, 0.5]
     },
     {
       "bufferView": 23,
@@ -714,16 +541,8 @@
       "componentType": 5126,
       "count": 171,
       "type": "VEC3",
-      "min": [
-        -0.8799999999999999,
-        -0.18,
-        -0.8666308226507431
-      ],
-      "max": [
-        0.8799999999999999,
-        0.18,
-        0.866630822650743
-      ]
+      "min": [-0.8799999999999999, -0.18, -0.8666308226507431],
+      "max": [0.8799999999999999, 0.18, 0.866630822650743]
     },
     {
       "bufferView": 27,
@@ -748,16 +567,8 @@
       "componentType": 5126,
       "count": 70,
       "type": "VEC3",
-      "min": [
-        -0.46,
-        -0.65,
-        -0.46
-      ],
-      "max": [
-        0.46,
-        0.65,
-        0.46
-      ]
+      "min": [-0.46, -0.65, -0.46],
+      "max": [0.46, 0.65, 0.46]
     },
     {
       "bufferView": 31,
@@ -788,12 +599,8 @@
       "componentType": 5126,
       "count": 3,
       "type": "SCALAR",
-      "min": [
-        0
-      ],
-      "max": [
-        2
-      ]
+      "min": [0],
+      "max": [2]
     },
     {
       "bufferView": 36,
@@ -806,12 +613,8 @@
       "componentType": 5126,
       "count": 3,
       "type": "SCALAR",
-      "min": [
-        0
-      ],
-      "max": [
-        1
-      ]
+      "min": [0],
+      "max": [1]
     },
     {
       "bufferView": 38,
@@ -824,12 +627,8 @@
       "componentType": 5126,
       "count": 3,
       "type": "SCALAR",
-      "min": [
-        0
-      ],
-      "max": [
-        0.25
-      ]
+      "min": [0],
+      "max": [0.25]
     },
     {
       "bufferView": 40,
@@ -864,12 +663,7 @@
     {
       "name": "Arena",
       "pbrMetallicRoughness": {
-        "baseColorFactor": [
-          0.35,
-          0.42,
-          0.48,
-          1
-        ],
+        "baseColorFactor": [0.35, 0.42, 0.48, 1],
         "baseColorTexture": {
           "index": 0
         },
@@ -880,12 +674,7 @@
     {
       "name": "Character",
       "pbrMetallicRoughness": {
-        "baseColorFactor": [
-          0.95,
-          0.32,
-          0.12,
-          1
-        ],
+        "baseColorFactor": [0.95, 0.32, 0.12, 1],
         "metallicFactor": 0,
         "roughnessFactor": 0.65
       },
@@ -894,12 +683,7 @@
     {
       "name": "Metallic showcase",
       "pbrMetallicRoughness": {
-        "baseColorFactor": [
-          0.08,
-          0.28,
-          0.95,
-          1
-        ],
+        "baseColorFactor": [0.08, 0.28, 0.95, 1],
         "metallicFactor": 0.92,
         "roughnessFactor": 0.14
       }
@@ -907,30 +691,16 @@
     {
       "name": "Emissive showcase",
       "pbrMetallicRoughness": {
-        "baseColorFactor": [
-          0.08,
-          0.03,
-          0.01,
-          1
-        ],
+        "baseColorFactor": [0.08, 0.03, 0.01, 1],
         "metallicFactor": 0,
         "roughnessFactor": 0.48
       },
-      "emissiveFactor": [
-        3.8,
-        0.26,
-        0.02
-      ]
+      "emissiveFactor": [3.8, 0.26, 0.02]
     },
     {
       "name": "Transparent double-sided showcase",
       "pbrMetallicRoughness": {
-        "baseColorFactor": [
-          0.05,
-          0.9,
-          0.82,
-          0.36
-        ],
+        "baseColorFactor": [0.05, 0.9, 0.82, 0.36],
         "metallicFactor": 0.12,
         "roughnessFactor": 0.2
       },
@@ -940,12 +710,7 @@
     {
       "name": "Unlit showcase",
       "pbrMetallicRoughness": {
-        "baseColorFactor": [
-          1,
-          0.78,
-          0.08,
-          1
-        ],
+        "baseColorFactor": [1, 0.78, 0.08, 1],
         "metallicFactor": 0,
         "roughnessFactor": 1
       },
@@ -957,12 +722,7 @@
     {
       "name": "Polished brass standard meshes",
       "pbrMetallicRoughness": {
-        "baseColorFactor": [
-          0.82,
-          0.36,
-          0.055,
-          1
-        ],
+        "baseColorFactor": [0.82, 0.36, 0.055, 1],
         "metallicFactor": 0.88,
         "roughnessFactor": 0.16
       }
@@ -1131,10 +891,7 @@
       "name": "Character skeleton",
       "inverseBindMatrices": 34,
       "skeleton": 4,
-      "joints": [
-        4,
-        5
-      ]
+      "joints": [4, 5]
     }
   ],
   "animations": [

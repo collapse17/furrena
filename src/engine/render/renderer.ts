@@ -65,14 +65,26 @@ uniform mat4 uModel;
 uniform mat4 uView;
 uniform mat4 uProjection;
 uniform mat3 uNormalMatrix;
-uniform int uUseSkinning;
+uniform int uSkinningMode;
 uniform mat4 uJointMatrices[MAX_UNIFORM_JOINTS];
+uniform sampler2D uJointPalette;
 out vec2 vUv;
 out vec3 vWorldPosition;
 out vec3 vWorldNormal;
+mat4 jointMatrix(uint index) {
+  if (uSkinningMode == 1) return uJointMatrices[index];
+  int row = int(index);
+  return mat4(
+    texelFetch(uJointPalette, ivec2(0, row), 0),
+    texelFetch(uJointPalette, ivec2(1, row), 0),
+    texelFetch(uJointPalette, ivec2(2, row), 0),
+    texelFetch(uJointPalette, ivec2(3, row), 0)
+  );
+}
 void main() {
   mat4 skinMatrix = mat4(1.0);
-  if (uUseSkinning == 1) skinMatrix = aWeights.x * uJointMatrices[aJoints.x] + aWeights.y * uJointMatrices[aJoints.y] + aWeights.z * uJointMatrices[aJoints.z] + aWeights.w * uJointMatrices[aJoints.w];
+  if (uSkinningMode != 0)
+    skinMatrix = aWeights.x * jointMatrix(aJoints.x) + aWeights.y * jointMatrix(aJoints.y) + aWeights.z * jointMatrix(aJoints.z) + aWeights.w * jointMatrix(aJoints.w);
   vec4 worldPosition = uModel * skinMatrix * vec4(aPosition, 1.0);
   vWorldPosition = worldPosition.xyz;
   vWorldNormal = normalize(uNormalMatrix * mat3(skinMatrix) * aNormal);
@@ -184,7 +196,10 @@ void main() { outColor = vec4(vColor, 1.0); }`;
 
 export class Renderer {
   readonly extensions: Readonly<Record<string, unknown>>;
-  readonly skinningCapabilities: Readonly<{ uniformJoints: number; texturePalette: boolean; }>;
+  readonly skinningCapabilities: Readonly<{
+    uniformJoints: number;
+    texturePalette: boolean;
+  }>;
   debug: RenderDebugOptions = {
     enabled: false,
     grid: true,
@@ -223,7 +238,13 @@ export class Renderer {
       debugRendererInfo: gl.getExtension("WEBGL_debug_renderer_info"),
     });
     this.skinningCapabilities = Object.freeze({
-      uniformJoints: Math.max(0, Math.min(MAX_UNIFORM_JOINTS, Math.floor(gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS) / 4) - 32)),
+      uniformJoints: Math.max(
+        0,
+        Math.min(
+          MAX_UNIFORM_JOINTS,
+          Math.floor(gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS) / 4) - 32,
+        ),
+      ),
       texturePalette: gl.getParameter(gl.MAX_TEXTURE_SIZE) >= 4,
     });
     this.shader = new ShaderProgram(
@@ -240,7 +261,8 @@ export class Renderer {
     );
     this.whiteTexture = Texture.solid(gl, [255, 255, 255, 255]);
     const jointPaletteTexture = gl.createTexture();
-    if (jointPaletteTexture === null) throw new Error("WebGL не создал texture palette.");
+    if (jointPaletteTexture === null)
+      throw new Error("WebGL не создал texture palette.");
     this.jointPaletteTexture = jointPaletteTexture;
     const vertexArray = gl.createVertexArray();
     const buffer = gl.createBuffer();
@@ -312,6 +334,7 @@ export class Renderer {
     asset: GpuGltfAsset,
     cameraPosition: readonly [number, number, number],
     animator?: GltfAnimator,
+    rootTransform: Matrix4 = createTrsMatrix(),
   ): void {
     const scene = asset.source.scenes[asset.source.defaultScene ?? 0];
     if (scene === undefined) return;
@@ -336,14 +359,52 @@ export class Renderer {
               cameraPosition,
               node.skin === undefined || animator === undefined
                 ? undefined
-                : animator.jointPalette(node.skin, world),
+                : animator.jointPalette(node.skin, world, rootTransform),
             );
         }
       }
       for (const child of node.children) visit(child, world);
     };
     const identity = createTrsMatrix();
+    identity.set(rootTransform);
     for (const rootNode of scene.nodes) visit(rootNode, identity);
+  }
+
+  /** Queues one glTF node and its descendants, for independently placed instances. */
+  enqueueGltfNode(
+    asset: GpuGltfAsset,
+    nodeIndex: number,
+    cameraPosition: readonly [number, number, number],
+    animator?: GltfAnimator,
+    rootTransform: Matrix4 = createTrsMatrix(),
+  ): void {
+    const visit = (index: number, parent: Matrix4): void => {
+      const node = asset.source.nodes[index];
+      if (node === undefined) return;
+      const local =
+        node.matrix !== undefined && node.matrix.length === 16
+          ? new Float32Array(node.matrix)
+          : createTrsMatrix(node.translation, node.rotation, node.scale);
+      const world = multiplyMatrices(parent, local);
+      if (node.mesh !== undefined) {
+        const mesh = asset.meshes[node.mesh];
+        if (mesh !== undefined)
+          for (const primitive of mesh.primitives)
+            this.enqueue(
+              primitive,
+              primitive.material === undefined
+                ? undefined
+                : asset.materials[primitive.material],
+              world,
+              cameraPosition,
+              node.skin === undefined || animator === undefined
+                ? undefined
+                : animator.jointPalette(node.skin, world, rootTransform),
+            );
+      }
+      for (const child of node.children) visit(child, world);
+    };
+    visit(nodeIndex, rootTransform);
   }
 
   render(camera: RenderCamera): RenderStats {
@@ -406,10 +467,6 @@ export class Renderer {
     this.whiteTexture.dispose();
     this.shader.dispose();
     this.debugShader.dispose();
-    this.skinningCapabilities = Object.freeze({
-      uniformJoints: Math.max(0, Math.min(MAX_UNIFORM_JOINTS, Math.floor(gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS) / 4) - 32)),
-      texturePalette: gl.getParameter(gl.MAX_TEXTURE_SIZE) >= 4,
-    });
     this.shader = new ShaderProgram(
       this.gl,
       VERTEX_SOURCE,
@@ -424,7 +481,8 @@ export class Renderer {
     );
     this.whiteTexture = Texture.solid(this.gl, [255, 255, 255, 255]);
     const jointPaletteTexture = this.gl.createTexture();
-    if (jointPaletteTexture === null) throw new Error("WebGL не создал texture palette.");
+    if (jointPaletteTexture === null)
+      throw new Error("WebGL не создал texture palette.");
     this.jointPaletteTexture = jointPaletteTexture;
     this.configureState();
   }
@@ -528,12 +586,18 @@ export class Renderer {
     }
     if (palette.jointCount <= this.skinningCapabilities.uniformJoints) {
       gl.uniform1i(this.shader.uniform("uSkinningMode"), 1);
-      gl.uniformMatrix4fv(this.shader.uniform("uJointMatrices[0]"), false, palette.matrices);
+      gl.uniformMatrix4fv(
+        this.shader.uniform("uJointMatrices[0]"),
+        false,
+        palette.matrices,
+      );
       return;
     }
     if (palette.jointCount > gl.getParameter(gl.MAX_TEXTURE_SIZE)) {
       gl.uniform1i(this.shader.uniform("uSkinningMode"), 0);
-      console.warn(`Скелет содержит ${palette.jointCount} joints и не помещается в texture palette.`);
+      console.warn(
+        `Скелет содержит ${palette.jointCount} joints и не помещается в texture palette.`,
+      );
       return;
     }
     gl.activeTexture(gl.TEXTURE3);
@@ -542,7 +606,17 @@ export class Renderer {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, 4, palette.jointCount, 0, gl.RGBA, gl.FLOAT, palette.matrices);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGBA32F,
+      4,
+      palette.jointCount,
+      0,
+      gl.RGBA,
+      gl.FLOAT,
+      palette.matrices,
+    );
     gl.uniform1i(this.shader.uniform("uJointPalette"), 3);
     gl.uniform1i(this.shader.uniform("uSkinningMode"), 2);
   }

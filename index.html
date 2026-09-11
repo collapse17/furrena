@@ -13,6 +13,23 @@
   <body>
     <main id="app">
       <canvas id="game-canvas" aria-label="Игровая область Furrena"></canvas>
+      <div id="game-hud" class="game-hud" hidden></div>
+      <div id="audio-controls" class="audio-controls" hidden>
+        <button id="audio-mute" type="button" aria-pressed="false">
+          Звук: вкл.
+        </button>
+        <label
+          >Громкость
+          <input id="audio-volume" type="range" min="0" max="1" step="0.05"
+        /></label>
+        <span id="audio-status" aria-live="polite"></span>
+      </div>
+      <div
+        id="game-crosshair"
+        class="game-crosshair"
+        hidden
+        aria-hidden="true"
+      ></div>
       <button
         id="status-overlay"
         class="status-overlay"

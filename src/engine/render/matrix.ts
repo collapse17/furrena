@@ -187,7 +187,8 @@ export function invertMatrix(matrix: Matrix4): Matrix4 | undefined {
   const b09 = at(9) * at(14) - at(10) * at(13);
   const b10 = at(9) * at(15) - at(11) * at(13);
   const b11 = at(10) * at(15) - at(11) * at(14);
-  const determinant = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+  const determinant =
+    b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
   if (Math.abs(determinant) < 0.0000001) return undefined;
   const inverse = 1 / determinant;
   return new Float32Array([
